@@ -1,0 +1,87 @@
+﻿@model IEnumerable<Customer>
+
+@{
+    ViewData["Title"] = "Customer List";
+}
+
+@section Scripts {
+    @await Html.PartialAsync("_ValidationScriptsPartial")
+
+    <script>
+        function countryDropDownFilter(element) {
+             element.kendoDropDownList({
+                 optionLabel: "--Select Country--",
+                 dataTextField: "Text",
+                 dataValueField: "Value",
+                 dataSource: {
+                     transport: {
+                         read: {
+                             url: "@Url.Action("GetCountries", "Customer")",
+                             dataType: "json"
+                         }
+                     }
+                 }
+             });
+         }
+    </script>
+}
+
+
+<div class="text-center">
+    <h1 class="display-4">Customer List</h1>
+</div>
+
+@(
+Html.Kendo().Grid<Customer>()
+    .Name("CustomerGrid")
+    .Columns(columns =>
+    {
+        columns.Bound(c => c.CustomerId).Hidden().EditorTemplateName("Hidden");
+        columns.Bound(c => c.Name).Title("Name");
+        columns.Bound(c => c.Email).Title("Email");
+        columns.Bound(c => c.Country).Title("Country")
+           .Filterable(ftb => ftb
+               .UI("countryDropDownFilter")
+           );
+        columns.Bound(c => c.CreatedDate).Title("Created Date").Format("{0:MM/dd/yyyy}");
+        columns.Command(command =>
+        {
+            command.Edit();
+            command.Destroy();
+        }).Title("Actions").Width(200);
+    })
+    .ToolBar(toolbar =>
+    {
+        toolbar.Create();
+        toolbar.Excel();
+        toolbar.Pdf();
+    })
+    .Pageable()
+    .Sortable()
+    .Filterable()
+    .Editable(editable => editable
+        .Mode(GridEditMode.PopUp)
+    )
+    .Excel(excel => excel
+        .FileName("Customers.xlsx")
+        .Filterable(true)
+        .AllPages(true))
+    .Pdf(pdf => pdf
+        .FileName("Customers.pdf")
+        .AllPages(true)
+        .PaperSize("A4"))
+    .DataSource(dataSource => dataSource
+        .Ajax()
+        .PageSize(10)
+        .Read(read => read.Action("GetCustomers", "Customer"))
+        .Create(create => create.Action("CreateCustomer", "Customer"))
+        .Update(update => update.Action("UpdateCustomer", "Customer"))
+        .Destroy(destroy => destroy.Action("DestroyCustomer", "Customer").Type(HttpVerbs.Post))
+        .Model(model =>
+        {
+            model.Id(c => c.CustomerId);
+            model.Field(c => c.CustomerId).Editable(false);
+        })
+    )
+)
+
