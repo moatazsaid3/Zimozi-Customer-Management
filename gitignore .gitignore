@@ -1,0 +1,53 @@
+## Build results
+bin/
+obj/
+out/
+
+## User-specific files
+*.user
+*.suo
+*.userosscache
+*.sln.docstates
+
+## Visual Studio Code
+.vscode/
+
+## ASP.NET Scaffolding
+ScaffoldingReadMe.txt
+
+## IIS Express
+.vs/
+*.vspscc
+*.vssscc
+
+## Logs
+*.log
+
+## NuGet
+*.nupkg
+packages/
+.nuget/
+
+## Entity Framework
+Migrations/
+
+## Publish output
+publish/
+wwwroot/dist/
+wwwroot/node_modules/
+
+## OS generated files
+.DS_Store
+Thumbs.db
+
+## Rider
+.idea/
+
+## Test results
+TestResults/
+*.coverage
+*.coveragexml
+
+## Others
+*.dbmdl
+*.jfm
